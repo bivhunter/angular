@@ -22,7 +22,15 @@ export class ListComponent implements OnInit {
        this.tasks = [].concat(data);
      }
    }, error =>{
+     console.log(error);
    });
+
+   this.server.newTask.subscribe( (data: Task) => {
+     if (data['body']) {
+       this.tasks.unshift(data['body']);
+     }
+     console.log(data);
+    });
   }
 
   identify(index) {
