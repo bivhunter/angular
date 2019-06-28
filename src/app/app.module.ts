@@ -2,8 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { MyFirstComponentComponent } from "./components/myfirstcomponent/myfirstcomponent.component";
-import { TodoComponent } from './components/todo/todo.component';
+//import { MyFirstComponentComponent } from "./components/myfirstcomponent/myfirstcomponent.component";
+//import { TodoComponent } from './components/todo/todo.component';
 import { FormsModule } from "@angular/forms";
 import { HomeComponent } from './components/home/home.component';
 import { FormComponent } from './components/form/form.component';
@@ -15,8 +15,8 @@ import { HttpClientModule } from "@angular/common/http";
 @NgModule({
   declarations: [
     AppComponent,
-    MyFirstComponentComponent,
-    TodoComponent,
+  //  MyFirstComponentComponent,
+   // TodoComponent,
     HomeComponent,
     FormComponent,
     ListComponent,

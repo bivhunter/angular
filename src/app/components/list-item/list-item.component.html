@@ -1,0 +1,12 @@
+<div class="card" [ngClass]='{"bg-success text-white": task.completed}'>
+  <div class="card-body">
+    <p class="card-text">{{task.title}}</p>
+    <button class="btn btn-primary">Edit</button>
+    <button class="btn btn-danger" (click)="deleteTask()">Delete</button>
+    <button class="btn btn-primary" (click)="updateTask()"
+            [ngClass]="{'btn-success': !task.completed, 'btn-primary': task.completed}"
+            >{{task.completed ? "UnDone" : "Done"}}
+                  </button>
+  </div>
+
+</div>
