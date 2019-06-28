@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {JsonplaceholderService} from "../../services/jsonplaceholder.service";
-import { Task} from "../../models/Task";
+
+import { JsonplaceholderService} from "../../services/jsonplaceholder.service";
+import { Task } from "../../models/Task";
 
 @Component({
   selector: 'app-list',
@@ -16,13 +17,47 @@ export class ListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.server.getTasks().subscribe(data => {
-      if (data) {
-        this.tasks = data;
-      }
-    }, error => {
-      console.log(error);
+    //console.log(this.server.getTasks());
+   this.server.getTasks().subscribe(data => {
+     if (data) {
+       this.tasks = [].concat(data);
+     }
+   }, error =>{
+     console.log(error);
+   });
+
+   this.server.newTask.subscribe( (data: Task) => {
+     if (data['body']) {
+       this.tasks.unshift(data['body']);
+     }
+     console.log(data);
     });
   }
 
+  identify(index) {
+    return index;
+  }
+
+  patchTask(task) {
+    /*let task : Task;
+    for (let i = 0; i < this.tasks.length; i++) {
+      if (this.tasks[i].id === id) {
+        task = this.tasks[i];
+        break;
+      }
+    }
+    */
+
+    this.server.patchTask(task.id, task.completed).subscribe( data => {
+      task.completed = !task.completed;
+    });
+  }
+
+  deleteTask (id) {
+    this.server.deleteTask(id).subscribe(data => {
+      this.tasks = this.tasks.filter( task => {
+        return task.id !== id;
+      });
+    });
+  }
 }
