@@ -33,6 +33,18 @@ export class ListComponent implements OnInit {
      });
    });
 
+   this.server.updatingTask.subscribe((task: Task) => {
+     console.log("title", task);
+     if (task['body']) {
+       this.tasks = this.tasks.map(item => {
+         if (item.id === task.id) {
+           item.title = task['body'].title;
+         }
+         return item;
+       });
+     }
+   });
+
    this.server.newTask.subscribe( (data: Task) => {
      if (data['body']) {
        const  newTask = Object.assign({}, data['body'], {id: data.id});
@@ -59,6 +71,10 @@ export class ListComponent implements OnInit {
     this.server.patchTask(task.id, task.completed).subscribe( data => {
       task.completed = !task.completed;
     });
+  }
+
+  editTask(task: Task) {
+    this.server.emitEditTask(task);
   }
 
   deleteTask (id) {

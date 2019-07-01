@@ -11,6 +11,8 @@ import { FlashMessagesService} from "angular2-flash-messages";
 export class FormComponent implements OnInit {
 
   title: string;
+  isEdit: boolean = false;
+  currentTaskId: number;
   @ViewChild('form', {static: false}) form;
 
   constructor(
@@ -19,6 +21,55 @@ export class FormComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.server.editingTask.subscribe((task: Task) => {
+      if (task.title) {
+        this.isEdit = true;
+        this.title = task.title;
+        this.currentTaskId = task.id;
+      }
+    });
+  }
+
+  editTask() {
+    const updateTask = {
+      id: this.currentTaskId,
+      userId: 1,
+      completed: false,
+      title: this.title
+    };
+
+    this.server.editTask(updateTask).subscribe((task: Task) => {
+      console.log("editTask", task);
+      this.form.reset();
+      this.isEdit = false;
+      this.server.emitUpdateTask(task);
+
+      this.flashMessage.show("Edit Success", {
+        cssClass: 'alert-success',
+        showCloseBtn: true,
+        closeOnClick: true,
+        timeout: 10000
+      });
+    }, error => {
+      this.flashMessage.show(error.message, {
+        cssClass: 'alert-danger',
+        showCloseBtn: true,
+        closeOnClick: true,
+        timeout: 10000
+      });
+    });
+  }
+
+  cancelTask() {
+    this.form.reset();
+    this.isEdit = false;
+    this.server.emitCancelTask(true);
+    this.flashMessage.show('Cancel editing!', {
+      cssClass: 'alert-success',
+      showCloseBtn: true,
+      closeOnClick: true,
+      timeout: 10000
+    });
   }
 
   addTask() {

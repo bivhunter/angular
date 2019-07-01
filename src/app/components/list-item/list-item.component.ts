@@ -9,8 +9,11 @@ import { JsonplaceholderService } from "../../services/jsonplaceholder.service";
   styleUrls: ['./list-item.component.css']
 })
 export class ListItemComponent implements OnInit {
+  isEdit: boolean = false;
+
   @Input() task: Task;
   @Output() delete = new EventEmitter();
+  @Output() edit = new EventEmitter();
   @Output() patch = new EventEmitter();
 
   constructor(
@@ -18,10 +21,23 @@ export class ListItemComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.server.updatingTask.subscribe(() => {
+      this.isEdit = false;
+    });
+
+    this.server.cancelTask.subscribe(() => {
+      this.isEdit = false;
+    });
   }
 
   deleteTask () {
    this.delete.emit(this.task.id);
+  }
+
+  editTask() {
+    const updateTask = Object.assign({}, this.task);
+    this.edit.emit(updateTask);
+    this.isEdit = true;
   }
 
   updateTask() {
